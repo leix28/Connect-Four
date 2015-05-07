@@ -4,6 +4,7 @@
 #include <pthread.h>
 #include <dlfcn.h>
 #include <unistd.h>
+#include <fstream>
 #include "Compete.h"
 #include "Point.h"
 #include "Data.h"
@@ -210,6 +211,35 @@ void printBoard(Data* data){
 	return;
 }
 
+void printBoard(Data* data, ofstream &out){
+    int noPos = data->noX * data->N + data->noY;
+    for(int i = 0; i < 12; i++){
+        for(int j = 0; j < 12; j++){
+            if (j >= data->N || i >= data->M) {
+                out << "O";
+                continue;
+            }
+            int pos = i * data->N + j;
+            if(data->boardA[pos] == 0){
+                if(pos == noPos){
+                    out << "X";
+                }
+                else{
+                    out << ".";
+                }
+            }
+            else if(data->boardA[pos] == 2){
+                out << "A";
+            }
+            else if(data->boardA[pos] == 1){
+                out << "B";
+            }
+        }
+        out << endl;
+    }
+    return;
+}
+
 /*
  input:
  strategyA[] strategyB[] 两个策略文件的文件名
@@ -218,7 +248,7 @@ void printBoard(Data* data){
  0 - 平局结束 1 - A赢 2 - B赢 3 - A出错 4 - A给出非法落子 5 - B出错 6 - B给出非法落子 7 - A超时 8 - B超时
  -1 - A文件无法载入 -2 - B文件无法载入 -3 - A文件中无法找到需要的接口函数 -4 - B文件中无法找到需要的接口函数
  */
-int compete(char strategyA[], char strategyB[], bool Afirst, Data* data){
+int compete(char strategyA[], char strategyB[], bool Afirst, Data* data, ofstream &out){
     pthread_mutex_init(&pmutex, NULL);
     pthread_cond_init(&pcond, NULL);
     
@@ -271,12 +301,15 @@ int compete(char strategyA[], char strategyB[], bool Afirst, Data* data){
 	while(true){
 		if(aGo){
 			res = AGo(getPointA, clearPointA, data);
+            out << data->lastY << "\tA" << endl;
 			aGo = false;
 		}
 		else{
-			res = BGo(getPointB, clearPointB, data);
+            res = BGo(getPointB, clearPointB, data);
+            out << data->lastY << "\tB" << endl;
 			aGo = true;
 		}
+        printBoard(data, out);
 		if(res != -1){
 			printBoard(data);
 			return res;

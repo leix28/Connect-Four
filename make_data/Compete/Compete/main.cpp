@@ -79,7 +79,7 @@ int main(int argc, char* argv[]){
 	
 	for(int i = 0; i < numRounds; i++){
 		cout << "Round " << i << ":" << endl;
-		out << i << ":" << endl;
+//		out << i << ":" << endl;
 		
 		Data* data = new Data();
         
@@ -87,18 +87,36 @@ int main(int argc, char* argv[]){
 		timeA = 0;
 		timeB = 0;
 		//data->reset();
-		res = compete(argv[1], argv[2], true, data);
+		res = compete(argv[1], argv[2], true, data, out);
 		determineResult(res, aWin, bWin, tie);
-		out << res << "\t" << timeA << "\t" << timeB << endl;
+        char resc;
+        if (res == 0)
+            resc = 'E';
+        else if (res == 1)
+            resc = 'A';
+        else if (res == 2)
+            resc = 'B';
+        else
+            resc = 'X';
+        
+        out << resc << endl;//"\t" << timeA << "\t" << timeB << endl;
 		
 		cout << "B first:" << endl;
 		timeA = 0;
 		timeB = 0;
 		data->reset();
-		res = compete(argv[1], argv[2], false, data);
+		res = compete(argv[1], argv[2], false, data, out);
 		determineResult(res, aWin, bWin, tie);
-		out << res << "\t" << timeA << "\t" << timeB << endl;
-		out << endl;
+        if (res == 0)
+            resc = 'E';
+        else if (res == 1)
+            resc = 'A';
+        else if (res == 2)
+            resc = 'B';
+        else
+            resc = 'X';
+        out << resc << endl;//"\t" << timeA << "\t" << timeB << endl;
+//		out << endl;
 		cout << endl;
         
 		delete data;
@@ -108,14 +126,15 @@ int main(int argc, char* argv[]){
 	double rioBWin = (1.0 * bWin) / (2.0 * numRounds);
 	double rioTie = (1.0 * tie) / (2.0 * numRounds);
     
-	out << "Stat:" << endl;
-	out << "ratio of A wins : " << rioAWin << endl;
-	out << "ratio of B wins : " << rioBWin << endl;
-	out << "ratio of Tie : " << rioTie << endl;
-	out << endl;
-	out << "ratio of (A wins + tie) : " << rioAWin + rioTie << endl;
-	out << "ratio of (B wins + tie) : " << rioBWin + rioTie << endl;
+//	out << "Stat:" << endl;
+//	out << "ratio of A wins : " << rioAWin << endl;
+//	out << "ratio of B wins : " << rioBWin << endl;
+//	out << "ratio of Tie : " << rioTie << endl;
+//	out << endl;
+//	out << "ratio of (A wins + tie) : " << rioAWin + rioTie << endl;
+//	out << "ratio of (B wins + tie) : " << rioBWin + rioTie << endl;
 	
+    out << "DONE!" << endl;
 	out.close();
 	
 	cout << "Stat:" << endl;
