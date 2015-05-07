@@ -1,0 +1,4 @@
+#Xcode Noise
+*.xcworkspace
+xcuserdata/
+DerivedData/
