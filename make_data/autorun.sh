@@ -6,7 +6,7 @@ do
 for ((j=i; j<=ub; j+=2))
 do
 
-while [ $(jobs | wc -l) -ge 8 ] ; do sleep 1 ; done
+while [ $(jobs | wc -l) -ge 4 ] ; do sleep 1 ; done
 
 ./Compete.lnk Testcases/$i.dylib Testcases/$j.dylib result/$i.$j.txt 5 > /dev/null&
 
